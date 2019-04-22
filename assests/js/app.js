@@ -11,3 +11,9 @@ d
     messagingSenderId: "260908491041"
   };
 firebase.initializeApp(config);
+
+//establish shortcut to write code
+var database = firebase.database();
+
+
+

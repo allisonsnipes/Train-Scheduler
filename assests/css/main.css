@@ -8,3 +8,9 @@
   width: 100%;
   text-align: center;
 }
+
+.jumbotron {
+  background-color: chocolate;
+  text-align: center;
+  color: white;
+}
