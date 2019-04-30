@@ -18,7 +18,7 @@ document.querySelector("#trainBut").addEventListener("click", function(event) {
   event.preventDefault();
 
 
-  //gather user's input and initilize them into variables
+  //gather user's input and initilize them into variables that will populate in the firebase database as initial data
   var tName = document.querySelector("#trainName").value.trim();
   var tTime = document.querySelector("#destinationTrain").value.trim();
   var tFirstTrain = document.querySelector("#enterFT").value.trim();
@@ -54,7 +54,7 @@ document.querySelector("#trainBut").addEventListener("click", function(event) {
 database.ref().on("child_added", function(childSnapshot){
   console.log(childSnapshot.val());
   //store all values into variables specific to that value we need to gather
-  var
+  //var
 })
 
 
@@ -62,23 +62,51 @@ database.ref().on("child_added", function(childSnapshot){
 database.ref().on("child_added", function(childSnapshot) {
   console.log(childSnapshot.val());
 
-  //use the same name as above from the user's input but now save the values for the firebase entry
+    //use the same name as above from the user's input but now save the values for the firebase entry
     var tName = childSnapshot.val().name;
     var tTime = childSnapshot.val().trainTime;
     var tFirstTrain = childSnapshot.val().firstTrain;
     var tFreq = childSnapshot.val().frequency;
 
-  //train infor
-  console.log(tName);
-  console.log(tTime);
-  console.log(tFirstTrain);
-  console.log(tFreq);
+    //train infor
+    console.log(tName);
+    console.log(tTime);
+    console.log(tFirstTrain);
+    console.log(tFreq);
+
+    //start working with moment with additional things calc freq needed to get new temp obj for calc
+    let tempTrainData = {
+      name: tName,
+      trainTime: tTime,
+      frequency: tFreq
+    };
+
+  //prettify the train start
+  var trainStartPretty = moment.unix(tFirstTrain).format("MM/DD/YYYY");
   
-})
+  //add startDate to tempEmployeeData object
+  tempTrainData.startDate =trainStartPretty;
 
+  //calculate the minutes between times
+  var trainMinutes = moment().diff(moment(tFirstTrain, "X"), "minutes");
+  console.log(trainMinutes);
 
+  tempTrainData.minutes = trainMinutes;
+  tempTrainData.frequent = tFreq;
 
+  //calc when the next train comes
 
+  //loop through the childSnapshot object and create a new now
+  var newRow = document.createElement("tr");
 
-
-
+  //td: table data and tr:table row table elements
+  for (let prop of Object.values(tempTrainData)) {
+    let newTd = document.createElement("td");
+    newTd.innerText = prop;
+    newRow.appendChild(newTd);
+  }
+  
+  //append
+  //tbodies are important
+  document.querySelector("#trains > tbody").appendChild(newRow);
+});
