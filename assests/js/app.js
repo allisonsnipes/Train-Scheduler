@@ -68,7 +68,7 @@ database.ref().on("child_added", function(childSnapshot) {
     var tFirstTrain = childSnapshot.val().firstTrain;
     var tFreq = childSnapshot.val().frequency;
 
-    //train infor
+    //train info
     console.log(tName);
     console.log(tTime);
     console.log(tFirstTrain);
@@ -80,13 +80,7 @@ database.ref().on("child_added", function(childSnapshot) {
       trainTime: tTime,
       frequency: tFreq
     };
-
-  //prettify the train start
-  var trainStartPretty = moment.unix(tFirstTrain).format("MM/DD/YYYY");
-  
-  //add startDate to tempEmployeeData object
-  tempTrainData.startDate =trainStartPretty;
-
+    
   //calculate the minutes between times
   var trainMinutes = moment().diff(moment(tFirstTrain, "X"), "minutes");
   console.log(trainMinutes);
