@@ -24,7 +24,7 @@ document.querySelector("#trainBut").addEventListener("click", function(event) {
   var tFirstTrain = document.querySelector("#enterFT").value.trim();
   var tFreq = document.querySelector("#freq").value.trim();
 
-  //create local temporary object to hold train data
+  //local temporary object to hold train data
   var trainData = {
     name: tName,
     trainTime: tTime,
@@ -58,7 +58,7 @@ database.ref().on("child_added", function(childSnapshot){
 })
 
 
-//how is this the same from the steps above? difference making a way to add more users from what we gathered?
+//how is this the different from the steps above? possible difference making a way to add more users from what we gathered?
 database.ref().on("child_added", function(childSnapshot) {
   console.log(childSnapshot.val());
 
