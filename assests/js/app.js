@@ -74,33 +74,33 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log(tFirstTrain);
     console.log(tFreq);
 
-    //start working with moment with additional things calc freq needed to get new temp obj for calc
-    let tempTrainData = {
-      name: tName,
-      trainTime: tTime,
-      frequency: tFreq
-    };
-    
-  //calculate the minutes between times
-  var trainMinutes = moment().diff(moment(tFirstTrain, "X"), "minutes");
-  console.log(trainMinutes);
-
-  tempTrainData.minutes = trainMinutes;
-  tempTrainData.frequent = tFreq;
-
-  //calc when the next train comes
-
-  //loop through the childSnapshot object and create a new now
-  var newRow = document.createElement("tr");
-
-  //td: table data and tr:table row table elements
-  for (let prop of Object.values(tempTrainData)) {
-    let newTd = document.createElement("td");
-    newTd.innerText = prop;
-    newRow.appendChild(newTd);
-  }
+  //logic for time to work
+  var timeSplit = tFirstTrain.split(":");
+  var tTrainTime = moment().hours(timeSplit[0]).minutes(time[1]);
+  var arrive;
+  var lastTrain = moment.max(moment(), tTrainTime);
+  var mins;
   
-  //append
-  //tbodies are important
-  document.querySelector("#trains > tbody").appendChild(newRow);
+  //start the train calculation proper logic to think if the train is on time or not
+  if (lastTrain === tTrainTime) {
+    arrive = tTime.format("hh:mm A"); //format time
+    mins = tTime.diff(moment(), "minutes");//calc time difference
+  } else {
+    var dTime = moment().diff(tTime, "minutes");
+    var remain = dTime % tFreq;
+    tFinalTime = tFreq - remain;
+    arrive = moment().add(mins, "m").format("hh:mm A")
+  }
+
+  //show info in the table
+    $("#train-table > tbody").append(
+      $("<tr>").append(
+        $("<td>").text(tName),
+        $("<td>").text(tTime),
+        $("<td>").text(tFreq),
+        $("<td>").text(tFirstTrain),
+        $("<td>").text(tArrival),
+        $("<td>").text(tMinutes)
+      )
+    );
 });
